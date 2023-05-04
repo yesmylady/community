@@ -16,3 +16,7 @@
 - git merge：合并两个分支的变化。
 - git tag：给一个重要的变更打上标签，如一个版本号。
 - git diff：查看两个版本之间的差异。
+
+git init之后，用git add . 命令将.gitignore文件所指明之外的文件都添加到暂存里。
+
+git commit -m "init repo": 把第一次的暂存区的变化提交到本地仓库，代号为init repo
