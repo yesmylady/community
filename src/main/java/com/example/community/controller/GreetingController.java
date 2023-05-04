@@ -15,6 +15,7 @@ public class GreetingController {
      * model对象的功能就类似于django中的render(context, *.html)中的context，把变量带进静态html里渲染
      *
      * @GetMapping("path") ensures that HTTP GET requests to /greeting are mapped to the greeting() method.
+     *                     顾名思义是用来处理get请求，get的特点就是参数在url后边跟着，而post传的信息在请求头里面
      *                     说人话就是把前端访问的路径"/greeting"绑定交由这个greeting()方法去处理
      *
      * @RequestParam 加在String name上的一个注解：表示请求参数，即前端发过来的url?后面跟的参数
@@ -28,4 +29,7 @@ public class GreetingController {
         model.addAttribute("name", name);
         return "greeting";
     }
+//
+//    @GetMapping("/")  // 根目录
+//    public String index() {return "index";}
 }
