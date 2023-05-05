@@ -8,14 +8,19 @@
         <version>2.7.5</version>  <!-- 用java8时要把这个版本号改成2.7.5，3.0.0以上的java8不支持 -->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.example</groupId>
     <artifactId>community</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>community</name>
     <description>Demo project for Spring Boot</description>
+
+
     <properties>
+        <!--指定java版本，idea会据此自动配置项目结构和语法-->
         <java.version>8</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -32,6 +37,23 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <scope>3.14.1</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.78</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>2.8.0</version>
         </dependency>
 
     </dependencies>
