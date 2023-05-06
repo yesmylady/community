@@ -1,3 +1,7 @@
+/**
+ * 本文件为一个示例文件
+ */
+
 package com.example.community.controller;
 
 import org.springframework.stereotype.Controller;
@@ -29,7 +33,4 @@ public class GreetingController {
         model.addAttribute("name", name);
         return "greeting";
     }
-//
-//    @GetMapping("/")  // 根目录
-//    public String index() {return "index";}
 }

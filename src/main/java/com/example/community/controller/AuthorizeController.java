@@ -2,12 +2,19 @@ package com.example.community.controller;
 
 import com.example.community.dto.AccessTokenDTO;
 import com.example.community.dto.GithubUser;
+import com.example.community.mapper.UserMapper;
+import com.example.community.model.User;
 import com.example.community.provider.GithubProvider;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * 利用github的登录接口实现这边的登录功能，并且拿到用户的部分个人信息
@@ -38,20 +45,62 @@ public class AuthorizeController {
     @Value("${github.redirect.url}")
     private String redirectUrl;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    Logger logger = Logger.getLogger(this.getClass());
+
     // github网站会带着para访问这个网址
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
-                           @RequestParam(name="state") String state) {
+                           @RequestParam(name="state") String state,
+                           HttpServletRequest request) {
+        logger.info("github call '/callback' with para code&state");
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id(clientId);  // 由github OAuth生成的
-        accessTokenDTO.setClient_secret(clientSecret);
-        accessTokenDTO.setRedirect_url(redirectUrl);
+        accessTokenDTO.setClient_id(this.clientId);          // 由github OAuth生成的
+        accessTokenDTO.setClient_secret(this.clientSecret);  // 同由github OAuth生成
+        accessTokenDTO.setRedirect_url(this.redirectUrl);    // set by myself
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
 
+        // step4: get token
         String token = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser user = githubProvider.getUser(token);
-        System.out.println(user.getName());
+        logger.info("step4 & 5: get token: " + token);
+
+        GithubUser githubUser = githubProvider.getUser(token);
+        logger.info("step6: get github user info: " + githubUser);
+
+        if (githubUser != null) {
+            // 登录成功，写cookie和session
+            request.getSession().setAttribute("user", githubUser);
+            logger.info("login successful, user name: " + githubUser.getName());
+
+            User user = new User();
+            user.setToken(UUID.randomUUID().toString());
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
+
+            return "redirect:/";  // 加上redirect前缀导航栏也会回到index
+        } else {
+            // 登录失败，重新登录
+            return "redirect:/";
+        }
+    }
+
+    @GetMapping("/")
+    public String index() {
+        System.out.println("___________________");
+        logger.info("go to index");
         return "index";
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        System.out.println("testestsets");
+        logger.info("testestsetse");
+        return "greeting";
     }
 }

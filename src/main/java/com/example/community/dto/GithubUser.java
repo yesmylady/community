@@ -1,34 +1,17 @@
 package com.example.community.dto;
 
+
+import lombok.Data;
+
+@Data
 public class GithubUser {
     /**
      * Refer to Github user information, extract what I need.
+     * 我们只需要github user中的这三个信息，其中id在github系统里也是唯一的（对应到本地database的account_id）
      */
     private String name;
     private long id;
     private String bio;  // 其他简介
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
 }
+
+// jsjyz@bistu.edu.cn
