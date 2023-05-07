@@ -38,10 +38,10 @@
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <!-- 下面这行?后边的参数是github OAuth规定的-->
-                <li><a href="https://github.com/login/oauth/authorize?client_id=35bed685bab2aec9f622&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+
+<!--                根据session中是否有user信息来决定用户是否处于登录态  -->
+                <li class="dropdown" th:if="${session.user != null}">  <!-- 下面这行?后边的参数是github OAuth规定的-->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">个人资料</a></li>
                         <li><a href="#">消息中心</a></li>
@@ -49,6 +49,9 @@
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
+
+                <li th:unless="${session.user != null}"><a href="https://github.com/login/oauth/authorize?client_id=35bed685bab2aec9f622&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a></li>
+
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

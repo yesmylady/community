@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /**
@@ -54,7 +56,8 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
-                           HttpServletRequest request) {
+                           HttpServletRequest request,
+                           HttpServletResponse response) {
         logger.info("github call '/callback' with para code&state");
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(this.clientId);          // 由github OAuth生成的
@@ -76,12 +79,20 @@ public class AuthorizeController {
             logger.info("login successful, user name: " + githubUser.getName());
 
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            user.setToken(UUID.randomUUID().toString());  //
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
+            response.addCookie(new Cookie("token", user.getToken()));
+            /**
+             * 要做持久登录功能就要存cookie和session：若cookie中有当前用户信息且session里也有，则等于登录上了
+             *                                     若cookie没有，而session里有，
+             *                                     若都没有，则在session新建一个用户登录上去
+             * session是存储在服务器端的数据，因为这里已经在数据库里存好了，用本地数据库代替session
+             * cookie是存在客户端的，需要保存一下
+             */
 
             return "redirect:/";  // 加上redirect前缀导航栏也会回到index
         } else {
@@ -90,17 +101,4 @@ public class AuthorizeController {
         }
     }
 
-    @GetMapping("/")
-    public String index() {
-        System.out.println("___________________");
-        logger.info("go to index");
-        return "index";
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        System.out.println("testestsets");
-        logger.info("testestsetse");
-        return "greeting";
-    }
 }

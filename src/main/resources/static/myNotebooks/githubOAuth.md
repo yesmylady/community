@@ -12,7 +12,7 @@ premise: 先把自己的库上传到github repo
  
  4. 第三方应用收到code后，拼接client_id和client_secret，向github请求access_token。 (拼接成一个DTO对象，再转成json放进requestBody)
  
- 5. github验证参数合法后，返回access_token给第三方应用。(执行上一步生成的请求，得到)
+ 5. github验证参数合法后，返回access_token给第三方应用。(执行上一步生成的请求，得到response并在其中提取出token)
  
  6. 第三方应用使用access_token，向github请求用户数据。
  
@@ -29,3 +29,6 @@ premise: 先把自己的库上传到github repo
          .url("https://api.github.com/user")  // 不再使用url加后缀的方式
          .build();
 ```
+
+##### github用户名
+你的github用户名yesmylady不是name，name需要去profile里自己设。。。
