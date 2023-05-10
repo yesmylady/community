@@ -1,0 +1,3 @@
+这层里都是存的接口，mybatis已经配置好了路径，能找到这里
+不论是直接用@Select @Insert还是另写xml文件做数据库访问
+mybatis都会把这里的接口方法生成为可调用的类方法，在service层里用@Mapper注入接口即可使用

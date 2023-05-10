@@ -57,6 +57,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>7.1.1</version>
+        </dependency>
+
         <!--        <dependency>-->
         <!--            <groupId>org.mybatis</groupId>-->
         <!--            <artifactId>mybatis</artifactId>-->
@@ -114,6 +120,20 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.0.0</version>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3306/community</url>
+                    <user>root</user>
+                    <password>199911</password>
+                    <schemas>
+                        <schema>community</schema>
+                    </schemas>
+                </configuration>
             </plugin>
         </plugins>
     </build>

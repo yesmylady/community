@@ -1,0 +1,26 @@
+/* body不用加.啊卧槽，加.的都是class里的 */
+body {
+    background-color: #efefef;
+}
+
+.main {
+    background-color: white;
+    margin: 30px;
+}
+
+.btn-publish {
+    float: right;
+    margin-bottom: 15px;
+}
+
+/* 为bootstrap里的class样式添加新属性，在html文件中引入即可生效 */
+.media-object {
+    height: 38px;
+    width: 38px;
+}
+
+.text-small {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999999;
+}

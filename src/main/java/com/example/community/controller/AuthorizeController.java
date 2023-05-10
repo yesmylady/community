@@ -6,6 +6,7 @@ import com.example.community.mapper.UserMapper;
 import com.example.community.model.User;
 import com.example.community.provider.GithubProvider;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +48,7 @@ public class AuthorizeController {
     @Value("${github.redirect.url}")
     private String redirectUrl;
 
-    @Autowired
+    @Mapper
     private UserMapper userMapper;
 
     Logger logger = Logger.getLogger(this.getClass());
@@ -69,6 +70,10 @@ public class AuthorizeController {
         // step4: get token
         String token = githubProvider.getAccessToken(accessTokenDTO);
         logger.info("step4 & 5: get token: " + token);
+        if (token == null) {
+            logger.info("未获取到token，也拿不到用户信息，认为登录失败");
+            return "redirect:/";
+        }
 
         GithubUser githubUser = githubProvider.getUser(token);
         logger.info("step6: get github user info: " + githubUser);
@@ -84,6 +89,7 @@ public class AuthorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user);
             response.addCookie(new Cookie("token", user.getToken()));
             /**
@@ -94,7 +100,7 @@ public class AuthorizeController {
              * cookie是存在客户端的，需要保存一下
              */
 
-            return "redirect:/";  // 加上redirect前缀导航栏也会回到index
+            return "redirect:/";  // 加上redirect前缀相当于前端多发了一个请求，不加的话是后端直接返回主页
         } else {
             // 登录失败，重新登录
             return "redirect:/";

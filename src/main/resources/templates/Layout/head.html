@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--其余四个文件继承这个文件的head-->
+
+<head th:fragment="head">
+<!--    <title>Getting Started: Serving Web Content</title>-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- 他妈的，写../static/css/居然不行？有毛病？ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js/" type="application/javascript"></script>
+</head>
+</html>

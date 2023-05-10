@@ -12,6 +12,7 @@ public class GithubUser {
     private String name;
     private long id;
     private String bio;  // 其他简介
+    private String avatarUrl;
 }
 
 // jsjyz@bistu.edu.cn

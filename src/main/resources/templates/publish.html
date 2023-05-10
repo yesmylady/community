@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>主页</title>
+    <title>发布</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- 他妈的，写../static/css/居然不行？有毛病？ -->
@@ -9,22 +9,22 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="css/community.css"/>
 
-
     <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
     <script src="js/bootstrap.min.js/" type="application/javascript"></script>
 </head>
+
 <body>
 <!--    <header th:replace="Layout/header :: header"></header>-->
-
     <nav class="navbar navbar-default" th:fragment="navgation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">张弓社区</span>
+
                 </button>
-                <a class="navbar-brand" href="/">张弓社区</a>
+                <a class="navbar-brand" href="#">张弓社区</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -62,40 +62,47 @@
         </div><!-- /.container-fluid -->
     </nav>
 
-
+    <!-- 发布页面分两大块，左边是主要的编辑页面占9，右边是guiding页面占3 -->
+    <!--        这里的col-lg针对电脑大屏幕，col-md和col-sm针对小屏幕，12表示这两个分别占一页，等同于排不下竖着排了-->
     <div class="container-fluid main">
         <div class="row">
             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>发现</h2>
-                <hr>
-                <div class="media" th:each="question : ${questions}">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object img-rounded"
-                                 th:src="#{question.user.avatarUrl}">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading" th:text="${question.title}"></h4>
-                        <span th:text="${question.description}"></span>
+                <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
 
-                        <span class="text-small">
-                            <span th:text="${question.commentCount}">回复 -</span>
-                            <span th:text="${question.viewCount}">次浏览 -</span>
-                            <span>？小时前</span>
-                        </span>
+                <hr/>
+
+                <form action="/publish" method="post">
+                    <div class="form-group">
+                        <label for="title">问题标题(简明扼要): </label>
+                        <input type="text" class="form-control" th:value="${title}" id="title" name="title" placeholder="问题标题...">
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label for="description">问题补充(必填，参照右侧提示): </label>
+                        <textarea class="form-control" th:text="${description}" cols="30" rows="10" id="description" name="description"
+                                  placeholder="这个是textarea标签，才能设置cols和rows，即长和宽，不是input form"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tag">添加标签: </label>
+                        <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag" placeholder="输入标签，以,分隔">
+                    </div>
+
+                    <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+                    <button type="submit" class="btn btn-success btn-publish">发布</button>
+                </form>
+
             </div>
 
             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                <h3>热门话题</h3>
-                巴拉巴拉<br>
-                巴拉巴拉<br>
-                巴拉巴拉<br>
+                <h3>问题发起指南</h3>
+                标题巴拉巴拉<br>
+                补充巴拉巴拉<br>
+                标签巴拉巴拉<br>
             </div>
         </div>
     </div>
+
 <!--    <footer th:replace="Layout/footer :: footer"></footer>-->
 </body>
 </html>
