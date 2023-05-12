@@ -1,3 +1,6 @@
+/* 这个css文件有时候好像反应慢点啊，在网页端用localhost:8080/css/community.css访问时没跟上本地版本，需要idea重新build一下 */
+
+
 /* body不用加.啊卧槽，加.的都是class里的 */
 body {
     background-color: #efefef;
@@ -23,4 +26,9 @@ body {
     font-size: 12px;
     font-weight: normal;
     color: #999999;
+}
+
+/*在profile.html文件中，main块里加上profile，再在其中的目标list-group旁边加上section，中间要有空格哦*/
+.profile .section {
+    margin-top: 15px;
 }

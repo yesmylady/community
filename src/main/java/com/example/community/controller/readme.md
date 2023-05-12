@@ -34,3 +34,31 @@ public class GreetingController {
     }
 }
 ```
+
+### github授权登录
+- provider: 参考github授权登录教程写出getAccessToken()和getUser(token)
+- controller: 
+    - 参考github OAuth写自己的callback，并在其中调用provider完成后续登录步骤，并将user插入数据库
+    - 后续登录时若cookie中有token，则直接拿出来查找数据库，若存在则通过写入session的方式确定登录
+- dto: GithubUser用来接收github用户信息，在controller里封装进本地model User里
+
+前端检查登录的方式是通过检查session中的user
+
+### 主页问题目录分页展示
+- dto: 构建一个PaginationDTO，包含当前页面的questionDTOList和各种状态参数  
+- controller: getMapping接收page和size参数  
+- service: 根据数据库中的信息和page,size参数把paginationDTO填充好，并计算出mapper所需参数  
+- mapper: select语句中使用limit start,offset来  
+
+前端：th:each遍历展示本页的question，在bootstrap3里找页码样式，展示在service层写好的逻辑得到的正确页码和状态  
+
+因为是后端实现，每次换页都重新访问index controller
+
+### 发布问题页面
+- controller: 路由'/publish'，请求方式新增post，接收title,desc,tag参数，并写入数据库表
+- service:   
+- mapper: 
+
+前端表单填写内容：\<form action="/publish" method="post">
+
+

@@ -48,7 +48,7 @@ public class AuthorizeController {
     @Value("${github.redirect.url}")
     private String redirectUrl;
 
-    @Mapper
+    @Autowired
     private UserMapper userMapper;
 
     Logger logger = Logger.getLogger(this.getClass());

@@ -1,1 +1,0 @@
-与model层把数据库表转成object不同的是，dto（data to object）是针对外部传过来的数据
