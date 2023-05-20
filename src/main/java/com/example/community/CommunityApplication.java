@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * This annotation tells Spring to scan for components (including mappers) in the specified packages.
  */
 //@ComponentScan(basePackages = {"com.example.community.mapper"})  别鸡巴跟着乱写！这个会把扫controller层弄没！
-@MapperScan("com.example.community.mapper")  // I don't know if it is usable
+@MapperScan("com.example.community.mapper")  // 自动生成的mapper没有@Mapper注解，需要这里显式指明文件路径
 @SpringBootApplication
 public class CommunityApplication {
 

@@ -54,6 +54,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.25</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -134,6 +135,21 @@
                         <schema>community</schema>
                     </schemas>
                 </configuration>
+            </plugin>
+
+<!--            mybatis generator包-->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.2</version>
+                <dependencies>
+<!--                    需要让mybatis generator知道自己依赖的数据库-->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.25</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

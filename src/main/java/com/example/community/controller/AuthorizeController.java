@@ -6,6 +6,7 @@ import com.example.community.mapper.UserMapper;
 import com.example.community.model.User;
 import com.example.community.provider.GithubProvider;
 
+import com.example.community.service.UserService;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class AuthorizeController {
     private String redirectUrl;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     Logger logger = Logger.getLogger(this.getClass());
 
@@ -87,10 +88,9 @@ public class AuthorizeController {
             user.setToken(UUID.randomUUID().toString());  //
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);  // 若db中存在此用户则应update而非insert
+
             response.addCookie(new Cookie("token", user.getToken()));
             /**
              * 要做持久登录功能就要存cookie和session：若cookie中有当前用户信息且session里也有，则等于登录上了
@@ -107,4 +107,15 @@ public class AuthorizeController {
         }
     }
 
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");  // session从前端的请求里更新
+        // 下面三行达到删除cookie的目的
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);                       // cookie从后端的回应里更新
+        return "redirect:/";
+    }
 }

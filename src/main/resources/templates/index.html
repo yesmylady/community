@@ -28,12 +28,14 @@
                 <div class="media" th:each="question : ${pagination.questionDTOList}">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-rounded"
+                            <img class="user-avatar img-rounded"
                                  th:src="${question.user.avatarUrl}">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading" th:text="${question.title}"></h4>
+                        <h4 class="media-heading">
+                            <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                        </h4>
                         <span th:text="${question.description}"></span>
                         <br>
                         <span class="text-small">

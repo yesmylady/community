@@ -17,7 +17,7 @@ body {
 }
 
 /* 为bootstrap里的class样式添加新属性，在html文件中引入即可生效 */
-.media-object {
+.user-avatar {
     height: 38px;
     width: 38px;
 }
@@ -31,4 +31,9 @@ body {
 /*在profile.html文件中，main块里加上profile，再在其中的目标list-group旁边加上section，中间要有空格哦*/
 .profile .section {
     margin-top: 15px;
+}
+
+.community-menu {
+    color: #999;
+    font-size: 13px;
 }

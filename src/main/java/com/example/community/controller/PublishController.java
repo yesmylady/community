@@ -1,31 +1,41 @@
 package com.example.community.controller;
 
 
+import com.example.community.dto.QuestionDTO;
 import com.example.community.mapper.QuestionMapper;
-import com.example.community.mapper.UserMapper;
 import com.example.community.model.Question;
 import com.example.community.model.User;
-import org.apache.ibatis.annotations.Mapper;
+import com.example.community.service.QuestionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublishController {
     @Autowired
-    private QuestionMapper questionMapper;
-    @Autowired
-    private UserMapper userMapper;
+    private QuestionService questionService;
 
 
     Logger logger = Logger.getLogger(this.getClass());
+
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                       Model model) {
+        logger.info("进入问题编辑页面，id传入model并隐藏在签单表单中");
+        QuestionDTO questionDTO = questionService.selectById(id);
+        model.addAttribute("id", questionDTO.getId());
+        model.addAttribute("title", questionDTO.getTitle());
+        model.addAttribute("description", questionDTO.getDescription());
+        model.addAttribute("tag", questionDTO.getTag());
+        return "/publish";
+    }
 
     @GetMapping("/publish")
     public String publish() {
@@ -38,12 +48,14 @@ public class PublishController {
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("tag") String tag,
+            @RequestParam("id") Integer id,
             HttpServletRequest request,
             Model model  // 像这种有多个返回路径时，model是跟着谁呢？return谁跟着谁？
             ) {
-        logger.info("准备发布问题...");
+        logger.info("发布新问题或更新问题...");
 
         // 这里model用于格式明显有误时保留之前填的内容
+        model.addAttribute("id", id);
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
@@ -61,18 +73,8 @@ public class PublishController {
             return "publish";
         }
 
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0)
-            for (Cookie cookie : cookies)
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
+        User user = (User) request.getSession().getAttribute("user");
+
         if (user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";
@@ -84,11 +86,10 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
+        question.setId(id);
 
         logger.info("开始将问题存入数据库...");
-        questionMapper.create(question);
+        questionService.createOrUpdate(question);
         logger.info("存入成功");
         return "redirect:/";  // 重定向到主页
     }

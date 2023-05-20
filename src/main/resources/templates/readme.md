@@ -6,3 +6,6 @@
 在标签中加上th:replace属性拿到模块替换自己，或用th:include附加模块，具体看代码
   
 思路：每个页面的body都有一套layout: header, nav, main, footer
+
+#### 导入资源文件
+必须在路径最前面加上/，不加的话默认是从与当前url同级别下找css文件(css目录在网页端url的第一层可以访问到)

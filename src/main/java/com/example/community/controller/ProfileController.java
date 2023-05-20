@@ -32,25 +32,9 @@ public class ProfileController {
                           HttpServletRequest request,
                           @RequestParam(name = "page", defaultValue = "1") Integer page,
                           @RequestParam(name = "size", defaultValue = "5") Integer size) {
-        // 拷贝自IndexCon
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0)
-            for (Cookie cookie: cookies)
-                if (cookie.getName().equals("token")) {
-                    logger.info("前端cookie里有用户token");
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        logger.info("在数据库中找到了与之对应的token");
-                        logger.info("把这个user加入到session中，这样前端页面就知道登录成功了");
-                        request.getSession().setAttribute("user", user);
-                    } else {
-                        logger.info("数据库中没有这个token对应的用户！就算session本来有user信息也不予自动登录");
-                        request.getSession().setAttribute("user", null);  // 清空session中的user信息
-                    }
-                    break;
-                }
+
+        User user = (User) request.getSession().getAttribute("user");
+
         if (user == null)
             return "redirect:/";  // 用redirect是为了让前端重新请求一次'/'，让IndexCon处理一下，传递必要的信息过去！而不是直接返回index.html文件，这样会丢失thymeleaf参数
         if ("questions".equals(action)) {
