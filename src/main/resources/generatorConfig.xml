@@ -6,6 +6,9 @@
 <generatorConfiguration>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
+<!--        分页函数要想用 offset + limit 的方式查询数据库，需要添加如下插件-->
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/community"
                         userId="root"
@@ -18,7 +21,10 @@
             <property name="forceBigDecimals" value="false" />
         </javaTypeResolver>
 
-        <!--        生成model层java实体 -->
+        <!--        生成model层java实体 和其example class
+        The Example class contains a set of Criteria objects,
+        each of which represents a condition on a column in the database table.
+        -->
         <javaModelGenerator targetPackage="com.example.community.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
@@ -37,14 +43,21 @@
 <!--
 确定最底层的数据库表
 schema一般没有，不填；tableName即database中的表名；domainObjectName即生成的model层对象名字q
-useActualColumnNames: model层使用数据库表原列名，默认false驼峰写法
+useActualColumnNames: model层使用数据库表原列名，默认false驼峰写法，所以注释掉
 -->
        <table tableName="user" domainObjectName="User" >
 <!--            <property name="useActualColumnNames" value="true"/>-->
-            <generatedKey column="ID" sqlStatement="DB2" identity="true" />
+<!--            <generatedKey column="ID" sqlStatement="DB2" identity="true" />-->
 <!--            <columnOverride column="DATE_FIELD" property="startDate" />-->
 <!--            <ignoreColumn column="FRED" />-->
-            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
+<!--            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
+        </table>
+
+        <table tableName="question" domainObjectName="Question">
+<!-- don't know why, this 'description' column hadn't been generated,
+so now I need to denote it manually, then regenerate pojo.
+重点是指定text字段为jdbcType中的varchar！-->
+            <columnOverride column="description" jdbcType="VARCHAR" javaType="String" />
         </table>
 
     </context>

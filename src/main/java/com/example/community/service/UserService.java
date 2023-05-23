@@ -30,7 +30,7 @@ public class UserService {
             user.setGmtModified(System.currentTimeMillis());
             userExample.clear();  // 清除之前残留的where条件
             userExample.or().andIdEqualTo(dbUser.getId());
-            userMapper.updateByExampleSelective(user, userExample);
+            userMapper.updateByExampleSelective(user, userExample);  // 用userExample定位到行，用user进行部分更新
         }
     }
 

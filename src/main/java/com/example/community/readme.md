@@ -32,7 +32,7 @@ model层里的@Data对象是与数据库表直接对应的(唯一不同是驼峰
 ### Mybatis generator
 - 是基于mybatis框架的一个根据数据库表自动生成java对象、接口、xml文件的一个插件。  
 - mybatis plus也有这个功能，且更加强大。可以自动生成每张表的CRUD相关的基础操作，不过复杂操作仍需要自己写。  
-- 在pom里配置插件和其数据库依赖、再generatorConfig.xml里配置生成过程控制
+- 在pom里配置插件和其数据库依赖、再generatorConfig.xml里配置生成过程控制，此xml第一行不要加注释！
 - 运行命令：mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 
 会生成两个（User和UserExample），UserExample用来指定要对数据库进行的操作，里边封装好了针对数据库表每一列的CRUD基本方法，
@@ -47,10 +47,17 @@ model层里的@Data对象是与数据库表直接对应的(唯一不同是驼峰
 // 本质是为数据库表中某列添加一条where语句！keep it in mind
 userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());  
 ```
+#### 配置文件
+generatorConfig.xml文件位于根目录下，会被自动识别，根据官网说明按步骤配置参数确定生成文件内容
+- mysql表中text字段在进行生成时，不会自动转化为jdbc的varchar类型，需要在<table>中新建<columnOverride>标签手动指定其映射关系
 
 ## 前端
+本项目没有采用前后端分离方式
+前后端分离：采用json在前后端之间传递数据，controller层用@RequestBody和@ResponseBody接受传递处理json和pojo  
+非前后端分离：如本项目，用渲染的方式从后端向前端传递数据（在controller层使用Model添加context），后端接收前端数据则可以在形参上用@RequestPara()  
 
 ### thymeleaf
-
+${}里是参数，@{}是路由参数
+注意th:text和th:value的不同
 
 ### bootstrap3
