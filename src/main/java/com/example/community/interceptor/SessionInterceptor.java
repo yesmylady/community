@@ -27,13 +27,13 @@ public class SessionInterceptor implements HandlerInterceptor {
         if (cookies != null && cookies.length != 0)
             for (Cookie cookie: cookies)
                 if (cookie.getName().equals("token")) {
-                    logger.info("前端cookie里有用户token");
+//                    logger.info("前端cookie里有用户token");
                     String token = cookie.getValue();
                     UserExample userExample = new UserExample();
                     userExample.createCriteria().andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
-                    if (users.size() != 0) {
-                        logger.info("在数据库中找到了与之对应的token, 把这个user加入到session中，这样前端页面就知道登录成功了");
+                    if (!users.isEmpty()) {
+//                        logger.info("在数据库中找到了与之对应的token, 把这个user加入到session中，这样前端页面就知道登录成功了");
                         request.getSession().setAttribute("user", users.get(0));
                     } else {
                         logger.info("数据库中没有这个token对应的用户！就算session本来有user信息也不予自动登录");

@@ -26,7 +26,7 @@ public class PublishController {
     Logger logger = Logger.getLogger(this.getClass());
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id,
+    public String edit(@PathVariable(name = "id") Long id,
                        Model model) {
         logger.info("进入问题编辑页面，id传入model并隐藏在签单表单中");
         QuestionDTO questionDTO = questionService.selectById(id);
@@ -48,7 +48,7 @@ public class PublishController {
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("tag") String tag,
-            @RequestParam("id") Integer id,
+            @RequestParam("id") Long id,
             HttpServletRequest request,
             Model model  // 像这种有多个返回路径时，model是跟着谁呢？return谁跟着谁？
             ) {

@@ -4,6 +4,7 @@ import com.example.community.dto.PaginationDTO;
 import com.example.community.dto.QuestionDTO;
 import com.example.community.exception.CustomizeErrorCode;
 import com.example.community.exception.CustomizeException;
+import com.example.community.mapper.QuestionExtMapper;
 import com.example.community.mapper.QuestionMapper;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.Question;
@@ -25,6 +26,8 @@ public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -38,7 +41,7 @@ public class QuestionService {
         return questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));  // 这一页从offset到offset+size
     }
 
-    public Integer countByUserId(Integer userId) {
+    public Integer countByUserId(Long userId) {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
         return (int)questionMapper.countByExample(questionExample);
@@ -80,7 +83,7 @@ public class QuestionService {
         return (int) Math.ceil((double)totalCount / size);  // 注意int/int自动为int！得用double
     }
 
-    public PaginationDTO selectByUserId(Integer userId, Integer page, Integer size) {
+    public PaginationDTO selectByUserId(Long userId, Integer page, Integer size) {
         Integer totalPage = this.totalPage(size);
         if (page < 1) page = 1;  // 把currentPage限定在正确的范围内
         else if (page > totalPage) page = totalPage;
@@ -105,11 +108,11 @@ public class QuestionService {
 
     }
 
-    public QuestionDTO selectById(Integer id) {
+    public QuestionDTO selectById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
-        if (question == null) {
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND  );
-        }
+        if (question == null)
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        logger.info("找到此问题条目");
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         questionDTO.setUser(userMapper.selectByPrimaryKey(question.getCreator()));
@@ -122,6 +125,9 @@ public class QuestionService {
         if (question.getId() == null) {  // 给的是一个新问题，无id属性
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         } else if(questionMapper.selectByPrimaryKey(question.getId()) == null){  // 有id属性，但数据库中没查到，假数据！
             logger.info("没有此id的问题！更新失败！");
@@ -130,5 +136,11 @@ public class QuestionService {
             question.setGmtModified(question.getGmtCreate());
             questionMapper.updateByPrimaryKey(question);
         }
+    }
+
+    public void incView(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        questionExtMapper.incView(question); 
     }
 }

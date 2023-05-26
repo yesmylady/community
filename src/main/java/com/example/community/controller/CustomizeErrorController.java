@@ -12,8 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 因为前端访问controller层中不存在的路由时会自动重定向到"/error"路由，
  * 这个类专门处理路由到"/error"的请求（如404，500等都会定向到这里）
+ * 因为前端访问controller层中不存在的路由时会自动重定向到"/error"路由.
  *
  * 注意exception层中的CustomizeException是为了容纳(请求能访问controller层但处理时在service层报错的)异常，并交由advice层处理
  */

@@ -1,3 +1,12 @@
+### 注解
+用于简化配置和提供声明式的编程模型，可以大大提高开发效率和代码可读性
+- @RequestMapping(value="/...", method=get/post)接收get或post请求，也能简写为@GetMapping和@PostMapping
+- @RequestBod修饰参数，接收前端传过来的json数据并可以自动将其注入到pojo中
+- @ResponseBody修饰返回值，与上面对应把pojo或map转换成json并写入response的body属性中返回给前端
+- @AutoWired/@Resource修饰属性，把这个类注入到spring容器中，交由spring管理
+- @Transactional修饰方法，当该方法被调用时，Spring将在事务上下文中执行该方法，并在方法执行完成后，提交或回滚事务。
+
+
 ### Cookie和Session
 我对cookie和session的理解：cookie长期存储在client浏览器端，
 session也是存在client浏览器，但每次访问网站开始时都是空的，
@@ -62,3 +71,6 @@ public class GreetingController {
 前端表单填写内容：\<form action="/publish" method="post">
 
 
+### 二级评论
+在问题展示页面下的评论，可以对评论进行回复，用两次请求分别加载一级、二级评论
+评论表的主要属性：所属问题id/所属一级评论id，所属用户，级别

@@ -1,4 +1,6 @@
-/* 这个css文件有时候好像反应慢点啊，在网页端用localhost:8080/css/community.css访问时没跟上本地版本，需要idea重新build一下 */
+/* 这个css文件有时候好像反应慢点啊，在网页端用localhost:8080/css/community.css访问时没跟上本地版本，需要idea重新build一下
+    改样式的一般方法：在浏览器端F12点开Elements页，在右边改样式至自己满意，再在这个文件里添加改好的样式
+*/
 
 
 /* body不用加.啊卧槽，加.的都是class里的 */
@@ -40,4 +42,17 @@ body {
 
 .jumbotron {
     margin: 50px;
+}
+
+.media-body {
+    padding-top: 10px;
+}
+
+.comment {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-comment {
+    float: right;
 }

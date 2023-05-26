@@ -50,7 +50,7 @@ public class UserService {
         }
     }
 
-    public User findById(Integer creator) {
+    public User findById(Long creator) {
         return userMapper.selectByPrimaryKey(creator);
     }
 

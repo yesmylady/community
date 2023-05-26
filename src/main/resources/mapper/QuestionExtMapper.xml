@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.community.mapper.QuestionExtMapper">
+  <resultMap id="BaseResultMap" type="com.example.community.model.Question">
+    <!--
+      这个是我们自己写的，扩展或覆盖自动生成的xml文件。
+      mvn generator命令加上override参数，就可以用这个覆盖生成的sql。此文件为自定义，不会被自动生成过程删除
+      比如这里为了线程安全（sql操作自带锁，之前用的是在java代码里计算出新的viewCount，而非直接在sql语句里改viewCount），更新view count时使用自己写的sql，而非自动生成的
+
+      注意上边namespace也需要改为新的
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
+    <result column="creator" jdbcType="INTEGER" property="creator" />
+    <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+  </resultMap>
+
+  <update id="incView" parameterType="com.example.community.model.Question">
+    update question set
+    view_count = view_count + 1
+    where id = #{id}
+  </update>
+
+  <update id="incCommentCount" parameterType="com.example.community.model.Question">
+    update question set
+      comment_count = comment_count + 1
+    where id = #{id}
+  </update>
+</mapper>

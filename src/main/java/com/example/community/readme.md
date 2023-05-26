@@ -34,11 +34,12 @@ model层里的@Data对象是与数据库表直接对应的(唯一不同是驼峰
 - mybatis plus也有这个功能，且更加强大。可以自动生成每张表的CRUD相关的基础操作，不过复杂操作仍需要自己写。  
 - 在pom里配置插件和其数据库依赖、再generatorConfig.xml里配置生成过程控制，此xml第一行不要加注释！
 - 运行命令：mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+- 命令: mvn mybatis-generator:generate不会删除之前生成的文件，但会生成多余的  
 
 会生成两个（User和UserExample），UserExample用来指定要对数据库进行的操作，里边封装好了针对数据库表每一列的CRUD基本方法，
 只需要选中指定的函数并传入指定的参数即可使用。  
 
-具体过程是：  
+Example文件主要用来配置where条件，具体过程是：  
 - 需要指定where条件时，先new一个Example对象，调用其createCriteria方法再调用配置where条件方法。（select默认会返回列表）
 - 不需要指定where条件时直接调用对应方法即可
 - 用主键当做where条件时直接上方法即可，不用配置Example对象，且返回的是一个pojo对象而非List
@@ -51,13 +52,22 @@ userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
 generatorConfig.xml文件位于根目录下，会被自动识别，根据官网说明按步骤配置参数确定生成文件内容
 - mysql表中text字段在进行生成时，不会自动转化为jdbc的varchar类型，需要在<table>中新建<columnOverride>标签手动指定其映射关系
 
+#### 自己写sql
+有时候generator生成的功能不能满足要求，就需要自己写sql
+1. 在mapper层（xml和interface）都拷贝原文件如QuestionMapper，并加上Ext表示这是自己的，就不会被mvn generator命令搞没掉
+2. 在service层中注入QuestionExtMapper，并在原使用处改成这个mapper的方法
+
 ## 前端
 本项目没有采用前后端分离方式
 前后端分离：采用json在前后端之间传递数据，controller层用@RequestBody和@ResponseBody接受传递处理json和pojo  
 非前后端分离：如本项目，用渲染的方式从后端向前端传递数据（在controller层使用Model添加context），后端接收前端数据则可以在形参上用@RequestPara()  
 
 ### thymeleaf
-${}里是参数，@{}是路由参数
+与java的Model或ModelAndView结合使用  
+${}里是参数，@{}是路由参数  
 注意th:text和th:value的不同
 
 ### bootstrap3
+项目访问本地css样式时是按照url访问的，相对路径时默认从当前url同级目录中找，绝对路径则会到static下找。
+
+遇到问题时在前端试试能不能找到所需文件

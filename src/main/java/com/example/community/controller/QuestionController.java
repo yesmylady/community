@@ -17,10 +17,17 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Integer id,
+    public String question(@PathVariable(name = "id") Long id,
                            Model model) {
-        QuestionDTO questionDTO = questionService.selectById(id);
+        try {
+            questionService.incView(id);  // 累加阅读数
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+
+        QuestionDTO questionDTO = questionService.selectById(id);  // DTO意味着模型方便与前端交互
         model.addAttribute("question", questionDTO);
+        logger.info("进入问题" + id + ": " + questionDTO.getTitle());
         return "question";
     }
 }
