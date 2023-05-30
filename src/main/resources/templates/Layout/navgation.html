@@ -32,6 +32,8 @@
                         <a href="/publish">发布</a>
                     </li>
 
+                    <li><a href="/profile/replies">通知<span class="badge" th:text="${session.unreadCount}"></span> </a></li>
+
                     <!--                根据session中是否有user信息来决定用户是否处于登录态  -->
                     <li class="dropdown" th:if="${session.user != null}">  <!-- 下面这行?后边的参数是github OAuth规定的-->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

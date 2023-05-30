@@ -71,3 +71,16 @@ ${}里是参数，@{}是路由参数
 项目访问本地css样式时是按照url访问的，相对路径时默认从当前url同级目录中找，绝对路径则会到static下找。
 
 遇到问题时在前端试试能不能找到所需文件
+
+
+### 富文本编辑
+参考：https://github.com/pandao/editor.md
+导入需要的文件至static下
+
+#### 图片上传
+本地服务：上传图片时把图片存到本地static/images下，之后前端再通过<img>的url就可以访问到图片
+
+先在富文本配置里设置能上传图片，并设置上传地址，即后端处理图片的controller
+在FileController里面写  
+
+由于插件要求controller返回固定的json类型的信息表示上传成功或失败，写一个DTO

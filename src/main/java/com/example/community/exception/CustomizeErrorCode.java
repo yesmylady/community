@@ -15,6 +15,9 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     SYS_ERROR(2004, "服务器出错"),
     TYPE_PARA_WRONG(2005, "评论类型错误或不存在"),
     COMMENT_NOT_FOUND(2006, "评论不存在于数据库！"),
+    CONTENT_IS_EMPTY(2007, "输入内容不能为空"),
+    READ_NOTIFICATION_FAIL(2008, "兄弟你这是读谁的信息呢？"),
+    NOTIFICATION_NOT_FOUND(2009, "没有通知！"),
 
     ERROR404(404, "404啊他妈的"),
     ERROR500(500, "500啊他妈的");

@@ -61,6 +61,7 @@ so now I need to denote it manually, then regenerate pojo.
         </table>
 
         <table tableName="comment" domainObjectName="Comment"></table>
+        <table tableName="notification" domainObjectName="Notification"></table>
 
     </context>
 </generatorConfiguration>
